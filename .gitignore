@@ -1,0 +1,16 @@
+# eclipse
+.classpath
+.project
+.settings
+
+# idea
+.idea
+*.iml
+
+# maven
+target
+
+
+# git
+!.gitignore
+
