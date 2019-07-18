@@ -415,4 +415,8 @@ public class ModeledXlsWriterHandler implements WriteHandler {
     public void addCustomCellStyleHandler(Predicate<Cell> predicate, BiFunction<Cell, CellStyleMo, CellStyleMo> handler) {
         this.sheetProperty.addCustomCellStyleHandler(predicate, handler);
     }
+
+    public void setFreeze(int freezeCol, int freezeRow) {
+        this.sheetProperty.setFreeze(freezeCol,freezeRow);
+    }
 }

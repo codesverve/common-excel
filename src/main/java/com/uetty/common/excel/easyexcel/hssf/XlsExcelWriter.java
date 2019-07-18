@@ -123,4 +123,8 @@ public class XlsExcelWriter {
         return this;
     }
 
+    public XlsExcelWriter setFreeze(int freezeCol, int freezeRow) {
+        this.modeledXlsWriterHandler.setFreeze(freezeCol,freezeRow);
+        return this;
+    }
 }

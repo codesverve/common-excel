@@ -277,4 +277,12 @@ public class SheetProperty {
         }
         return sheetStyle != null && sheetStyle.getDefaultColWidth() != -1 ? sheetStyle.getDefaultColWidth() : -1;
     }
+
+    public void setFreeze(int freezeCol, int freezeRow) {
+        if (this.sheetStyle == null) {
+            this.sheetStyle = new SheetStyleMo();
+        }
+        this.sheetStyle.setFreezeRow(freezeRow);
+        this.sheetStyle.setFreezeCol(freezeCol);
+    }
 }
