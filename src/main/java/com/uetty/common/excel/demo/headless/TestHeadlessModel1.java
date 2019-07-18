@@ -24,7 +24,8 @@ public class TestHeadlessModel1 {
                     IndexedColors color = rowIndex % 2 == 0 ? IndexedColors.BLUE : IndexedColors.GREY_25_PERCENT;
                     style.setBackgroundColor(color);
                     return style;
-                });
+                })
+                .clearFreeze();
         // 数据写入excel
         writer.write(createTestListObject2());
     }

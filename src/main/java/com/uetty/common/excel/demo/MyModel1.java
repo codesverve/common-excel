@@ -2,10 +2,7 @@ package com.uetty.common.excel.demo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.BaseRowModel;
-import com.uetty.common.excel.anno.CellStyle;
-import com.uetty.common.excel.anno.ColumnWidth;
-import com.uetty.common.excel.anno.ExplicitConstraint;
-import com.uetty.common.excel.anno.FontStyle;
+import com.uetty.common.excel.anno.*;
 import com.uetty.common.excel.constant.StyleType;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -14,6 +11,7 @@ import java.util.Date;
 
 // 宽度默认值
 @SuppressWarnings("unused")
+@CellFreeze(freezeRow = 2, freezeCol = 2)
 @ColumnWidth(width = 40)
 // 同时作用于表标题和内容的样式默认值
 @CellStyle(borderColor = IndexedColors.DARK_TEAL, backgroundColor = IndexedColors.CORAL, fontStyle = @FontStyle(color = IndexedColors.ORANGE, size = 14))
