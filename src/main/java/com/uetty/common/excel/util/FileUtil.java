@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Objects;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class FileUtil {
 
 	/**
@@ -26,34 +27,24 @@ public class FileUtil {
 	
 	public static void writeLine(File file, String string) throws IOException {
 		if (!file.exists()) {
+			//noinspection ResultOfMethodCallIgnored
 			file.getParentFile().mkdirs();
+			//noinspection ResultOfMethodCallIgnored
 			file.createNewFile();
 		}
-		FileOutputStream fis = null;
-		try {
-			fis = new FileOutputStream(file, true);
+		try (FileOutputStream fis = new FileOutputStream(file, true)) {
 			fis.write(string.getBytes());
 			fis.write("\n".getBytes());
-			
-		} finally {
-			if (fis != null) {
-				fis.close();
-			}
 		}
 	}
 	
 	public static boolean isAbsolutePath (String path) {
 		if (path.startsWith("/")) return true;
 		if (isWinOS()) {// windows
-			if (path.contains(":") || path.startsWith("\\")) {
-				return true;
-			}
+			return path.contains(":") || path.startsWith("\\");
 		} else {// not windows, just unix compatible
-			if (path.startsWith("~")) {
-				return true;
-			}
+			return path.startsWith("~");
 		}
-		return false;
 	}
 	
 	/**
@@ -78,8 +69,7 @@ public class FileUtil {
 		}
 		String urlPath = "jar:file:" + jarPath + "!" + filePath;
 		URL url = new URL(urlPath);
-		InputStream stream = url.openStream();
-		return stream;
+		return url.openStream();
 	}
 	
 	public static String getFileNamePrefix(String fileName) {
@@ -106,7 +96,6 @@ public class FileUtil {
 		return eq;
 	}
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void deleteFiles(File file) {
         deleteFiles0(file, null);
     }
@@ -197,13 +186,15 @@ public class FileUtil {
         } else {
             File parentFile = targetFile.getParentFile();
             if (parentFile != null && !parentFile.exists())
-                parentFile.mkdirs();
+				//noinspection ResultOfMethodCallIgnored
+				parentFile.mkdirs();
         }
-        targetFile.createNewFile();
+		//noinspection ResultOfMethodCallIgnored
+		targetFile.createNewFile();
         try (InputStream fis = sourceInput;
              FileOutputStream fos = new FileOutputStream(targetFile)) {
             byte[] bytes = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = fis.read(bytes)) != -1) {
                 fos.write(bytes, 0, len);
             }

@@ -11,10 +11,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/17 19:26
- */
 public class ExcelHelper {
 
     private static SimpleDateFormat fullTimeFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -27,8 +23,7 @@ public class ExcelHelper {
                 case NUMERIC:
                     double numTxt = cell.getNumericCellValue();
                     if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                        Date date = new Date(0);
-                        date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                        Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
                         DateFormat sdf = fullTimeFmt;
                         if (readDateFormat != null) {
                             sdf = readDateFormat;

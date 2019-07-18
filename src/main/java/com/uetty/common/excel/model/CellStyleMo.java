@@ -4,27 +4,23 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.util.Objects;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/16 14:21
- */
 public class CellStyleMo implements Cloneable {
 
-    HorizontalAlignment horizontalAlign;
+    private HorizontalAlignment horizontalAlign;
 
-    VerticalAlignment verticalAlign;
+    private VerticalAlignment verticalAlign;
 
-    BorderStyle borderStyle;
+    private BorderStyle borderStyle;
 
-    IndexedColors borderColor;
+    private IndexedColors borderColor;
 
-    IndexedColors backgroundColor;
+    private IndexedColors backgroundColor;
 
-    Boolean wrapText;
+    private Boolean wrapText;
 
-    FontStyleMo fontStyle;
+    private FontStyleMo fontStyle;
 
-    Font font;
+    private Font font;
 
     public HorizontalAlignment getHorizontalAlign() {
         return horizontalAlign;

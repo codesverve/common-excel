@@ -17,18 +17,15 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/17 15:12
- */
+@SuppressWarnings("unused")
 public class XlsExcelWriter {
 
-    String outputPath;
-    Class<? extends BaseRowModel> modelClazz;
-    ModeledXlsWriterHandler modeledXlsWriterHandler;
-    boolean needHead = true;
-    int sheetIndex = 1;
-    String sheetName;
+    private String outputPath;
+    private Class<? extends BaseRowModel> modelClazz;
+    private ModeledXlsWriterHandler modeledXlsWriterHandler;
+    private boolean needHead = true;
+    private int sheetIndex = 1;
+    private String sheetName;
 
     public <T extends BaseRowModel> XlsExcelWriter(String outputPath, Class<T> modelClazz, int startRow) {
         this.outputPath = Objects.requireNonNull(outputPath);

@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
  * 反射工具类
  * @author vince
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ReflectUtil {
 	
-	private static Logger logger = LoggerFactory.getLogger(ReflectUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReflectUtil.class);
 
 	private static String getterName(String fieldName) {
 		return "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
@@ -33,35 +34,35 @@ public class ReflectUtil {
     }
 	
 	public static Object getFieldValue(Object obj, String fieldName) {
-		Class<? extends Object> clz = obj.getClass();
+		Class<?> clz = obj.getClass();
 		try {
 			String getterName = getterName(fieldName);
 			return invokeMethod(obj, getterName);
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		try {
 			Field field = clz.getDeclaredField(fieldName);
 			if (field != null) {
 				field.setAccessible(true);
 				return field.get(obj);
 			}
-		} catch (Exception e) {};
+		} catch (Exception ignore) {}
 		try {
 			Field field = clz.getField(fieldName);
 			if (field != null) {
 				return field.get(obj);
 			}
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		throw new RuntimeException("field[" + fieldName + "] not found in " + obj);
 	}
 	
 	public static void setFieldValue(Object obj, String fieldName, Object value) {
-		Class<? extends Object> clz = obj.getClass();
+		Class<?> clz = obj.getClass();
 
 		try {
 			String setterName = setterName(fieldName);
 			invokeMethod(obj, setterName, value);
 			return;
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		
 		try {
 			Field field = clz.getDeclaredField(fieldName);
@@ -70,21 +71,21 @@ public class ReflectUtil {
 				field.set(obj, value);
 				return;
 			}
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		try {
 			Field field = clz.getField(fieldName);
 			if (field != null) {
 				field.set(obj, value);
 				return;
 			}
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		throw new RuntimeException("field[" + fieldName + "] not found in " + obj);
 	}
 	
 	public static List<String> getFieldNames(Object obj) {
-		Class<? extends Object> clz = obj.getClass();
+		Class<?> clz = obj.getClass();
 		Field[] fields = clz.getDeclaredFields();
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for (Field field : fields) {
 			String name = field.getName();
 			list.add(name);
@@ -145,24 +146,24 @@ public class ReflectUtil {
 	}
 
 	public static Class<?> getFieldClass(Object obj, String fieldName) {
-		Class<? extends Object> clz = obj.getClass();
+		Class<?> clz = obj.getClass();
 		try {
 			Field field = clz.getDeclaredField(fieldName);
 			if (field != null) {
 				field.setAccessible(true);
 				return field.getType();
 			}
-		} catch (Exception e) {};
+		} catch (Exception ignore) {}
 		try {
 			Field field = clz.getField(fieldName);
 			if (field != null) {
 				return field.getType();
 			}
-		} catch (Exception e) {}
+		} catch (Exception ignore) {}
 		throw new RuntimeException("field[" + fieldName + "] not found in " + obj);
 	}
 
-	public static Object getInstance(Class<? extends Object> clz, Object... params) {
+	public static Object getInstance(Class<?> clz, Object... params) {
 		Constructor<?>[] constructors = clz.getConstructors();
 		for (Constructor<?> constructor : constructors) {
 			try {
@@ -172,41 +173,41 @@ public class ReflectUtil {
 				}
 				constructor.setAccessible(true);
 				return constructor.newInstance(params);
-			} catch (Exception e) {}
+			} catch (Exception ignore) {}
 		}
 		if (params.length == 0) {
 			try {
 				return clz.newInstance();
-			} catch (Exception e) {}
+			} catch (Exception ignore) {}
 		}
 
 		return throwMethodNotFound(clz, 1, params);
 	}
 
 	public static Object invokeMethod(Object obj, String methodName, Object... params) {
-		Class<? extends Object> clz = obj.getClass();
+		Class<?> clz = obj.getClass();
 		if (params.length == 0) {
 			try {
 				Method method = clz.getMethod(methodName);
 				return method.invoke(obj);
-			} catch (Exception e) {}
+			} catch (Exception ignore) {}
 		} else {
 			// 参数类型绝对匹配的方法查找
-			Class<?> pclzs[] = new Class<?>[params.length];
+			Class<?>[] paramClazz = new Class<?>[params.length];
 			boolean noNull = true;
 			for (int i = 0; i < params.length; i++) {
 				Object p = params[i];
 				if (p == null) {
 					noNull = false;
 				} else {
-					pclzs[i] = p.getClass();
+					paramClazz[i] = p.getClass();
 				}
 			}
 			if (noNull) {
 				try {
-					Method method = clz.getMethod(methodName, pclzs); // 参数类型绝对匹配的方法
+					Method method = clz.getMethod(methodName, paramClazz); // 参数类型绝对匹配的方法
 					return method.invoke(obj, params);
-				} catch (Exception e) {}
+				} catch (Exception ignore) {}
 			}
 			
 			// 不追求绝对匹配，只要能调用即可
@@ -217,7 +218,7 @@ public class ReflectUtil {
 					Class<?>[] parameterTypes = m.getParameterTypes();
 					if (parameterTypes.length != params.length) continue;
 					return m.invoke(obj, params);
-				} catch (Exception e) {}
+				} catch (Exception ignore) {}
 			}
 		}
 		
@@ -225,20 +226,20 @@ public class ReflectUtil {
 	}
 
 	private static Object throwMethodNotFound(Class<?> clz, int methodType, Object[] params) {
-		String errorMsg = "(";
+		StringBuilder errorMsg = new StringBuilder("(");
 		if (methodType == 1) {
-			errorMsg = "constructor " + errorMsg;
+			errorMsg.insert(0, "constructor ");
 		} else if (methodType == 2) {
-			errorMsg = "static method " + errorMsg;
+			errorMsg.insert(0, "static method ");
 		} else if (methodType == 3) {
-			errorMsg = "method " + errorMsg;
+			errorMsg.insert(0, "method ");
 		}
 		for (int i = 0; i < params.length; i++) {
-			if (i != 0) errorMsg += ", ";
-			errorMsg += params[i] == null ? "null" : params[i].getClass().getName();
+			if (i != 0) errorMsg.append(", ");
+			errorMsg.append(params[i] == null ? "null" : params[i].getClass().getName());
 		}
-		errorMsg += ") not found in class[" + clz.getCanonicalName() + "]";
-		throw new RuntimeException(errorMsg);
+		errorMsg.append(") not found in class[").append(clz.getCanonicalName()).append("]");
+		throw new RuntimeException(errorMsg.toString());
 	}
 
 	public static Object invokeMethod(Class<?> clz, String methodName, Object... params) {
@@ -246,24 +247,24 @@ public class ReflectUtil {
 			try {
 				Method method = clz.getMethod(methodName);
 				return method.invoke(null);
-			} catch (Exception e) {}
+			} catch (Exception ignore) {}
 		} else {
 			// 参数类型绝对匹配的方法查找
 			boolean noNull = true;
-			Class<?> pclzs[] = new Class<?>[params.length];
+			Class<?>[] paramClazz = new Class<?>[params.length];
 			for (int i = 0; i < params.length; i++) {
 				Object p = params[i];
 				if (p == null) {
 					noNull = false;
 					break;
 				}
-				pclzs[i] = p.getClass();
+				paramClazz[i] = p.getClass();
 			}
 			if (noNull) {
 				try {
-					Method method = clz.getMethod(methodName, pclzs); // 参数类型绝对匹配的方法
+					Method method = clz.getMethod(methodName, paramClazz); // 参数类型绝对匹配的方法
 					return method.invoke(null, params);
-				} catch (Exception e) {}
+				} catch (Exception ignore) {}
 			}
 			
 			// 不追求绝对匹配，只要能调用即可
@@ -274,7 +275,7 @@ public class ReflectUtil {
 					Class<?>[] parameterTypes = m.getParameterTypes();
 					if (parameterTypes.length != params.length) continue;
 					return m.invoke(null, params);
-				} catch (Exception e) {}
+				} catch (Exception ignore) {}
 			}
 		}
 		
@@ -285,14 +286,14 @@ public class ReflectUtil {
 	 * 打印该类包含的变量名
 	 */
 	public static void printContainFieldNames(Class<?> clz) {
-		Set<String> fieldSet = new HashSet<String>();
+		Set<String> fieldSet = new HashSet<>();
 		try {
 			Field[] fields = clz.getFields(); // 公共变量（包含自父类继承的变量）
 			for (Field field : fields) {
 				fieldSet.add(field.getName());
 			}
 		} catch (Throwable e) {
-			logger.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		try {
 			Field[] fields = clz.getDeclaredFields(); // 非公共变量（无法包含自父类继承的变量）
@@ -300,10 +301,10 @@ public class ReflectUtil {
 				fieldSet.add(field.getName());
 			}
 		} catch (Throwable e) {
-			logger.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		for (String string : fieldSet) {
-			logger.debug(string);
+			LOG.debug(string);
 		}
 	}
 	
@@ -326,7 +327,7 @@ public class ReflectUtil {
 			URLClassLoader myLoader = new URLClassLoader(uls, null);
 			URL resource = myLoader.getResource(classFilePath);
 			return resource != null;
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 			return false;
 		}
 	}
@@ -335,7 +336,7 @@ public class ReflectUtil {
 		if (classloader == null) {
 			return;
 		}
-		logger.debug("classloader ==> " + classloader.toString());
+		LOG.debug("classloader ==> " + classloader.toString());
 		
 		if (!(classloader instanceof URLClassLoader)) {
 			return;
@@ -348,9 +349,9 @@ public class ReflectUtil {
 			if (!hasClass(url, classFilePath)) {
 				continue;
 			}
-			logger.debug(url.getPath());
+			LOG.debug(url.getPath());
 		}
-		logger.debug("------------------------------------------------");
+		LOG.debug("------------------------------------------------");
 		
 		ClassLoader parent = classloader.getParent();
 		printClassLoaderAndPath(parent, clz, classFilePath);

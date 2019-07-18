@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/16 15:07
- */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ICellRange extends CellRangeAddress implements Cloneable {
 
     public ICellRange(int firstRow, int lastRow, int firstCol, int lastCol) {
@@ -23,9 +20,6 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 挖除区域
-     * @Return : java.util.List<com.uetty.common.excel.model.ICellRange>
-     * @Author : Vince
-     * @Date : 2019/7/16 16:34
      */
     public List<ICellRange> subtractRange(ICellRange range) {
         List<ICellRange> list = new ArrayList<>();
@@ -72,9 +66,6 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 返回重叠区域
-     * @Return : com.uetty.common.excel.model.ICellRange
-     * @Author : Vince
-     * @Date : 2019/7/16 16:34
      */
     public ICellRange overlapRange(ICellRange range) {
         int left = Math.max(getMinColumn(), range.getMinColumn());
@@ -88,9 +79,6 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 是否重叠
-     * @Return : boolean
-     * @Author : Vince
-     * @Date : 2019/7/16 16:34
      */
     public boolean isOverlap(ICellRange range) {
         int top = Math.max(getMinRow(), range.getMinRow());
@@ -98,8 +86,7 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
         if (top > bottom) return false;
         int left = Math.max(getMinColumn(), range.getMinColumn());
         int right = Math.min(getMaxColumn(), range.getMaxColumn());
-        if (left > right) return false;
-        return true;
+        return left <= right;
     }
 
     public String toString1() {

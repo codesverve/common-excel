@@ -6,26 +6,27 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class SheetProperty {
 
-    int startRow;
-    int headRowNum;
-    boolean needHead = true;
-    CellStyleMo globalCellStyle; // 单元格样式
-    CellStyleMo globalHeaderStyle; // 表头单元格样式
-    CellStyleMo globalBodyStyle; // 表数据单元格样式
-    SheetStyleMo sheetStyle;
-    List<ICellRange> mergeRanges = new ArrayList<>(); // 合并单元格
-    Map<Integer, CellStyleMo> columnStyles = new HashMap<>(); // 指定列单元格样式
-    Map<Integer, CellStyleMo> columnHeaderStyles = new HashMap<>(); // 指定列表头单元格样式
-    Map<Integer, CellStyleMo> columnBodyStyles = new HashMap<>(); // 指定列表数据单元格样式
-    Map<Integer, Double> columnWidths = new HashMap<>(); // 列宽度
-    Map<ICellRange, String[]> explicitConstraints = new HashMap<>(); // 简单下拉菜单约束
+    private int startRow;
+    private int headRowNum;
+    private boolean needHead = true;
+    private CellStyleMo globalCellStyle; // 单元格样式
+    private CellStyleMo globalHeaderStyle; // 表头单元格样式
+    private CellStyleMo globalBodyStyle; // 表数据单元格样式
+    private SheetStyleMo sheetStyle;
+    private List<ICellRange> mergeRanges = new ArrayList<>(); // 合并单元格
+    private Map<Integer, CellStyleMo> columnStyles = new HashMap<>(); // 指定列单元格样式
+    private Map<Integer, CellStyleMo> columnHeaderStyles = new HashMap<>(); // 指定列表头单元格样式
+    private Map<Integer, CellStyleMo> columnBodyStyles = new HashMap<>(); // 指定列表数据单元格样式
+    private Map<Integer, Double> columnWidths = new HashMap<>(); // 列宽度
+    private Map<ICellRange, String[]> explicitConstraints = new HashMap<>(); // 简单下拉菜单约束
     // 单元格样式处理器链表，链式串联调用
     // Predicate用于判断是否进入该样式处理器，
     // BiFunction<Cell, CellStyleMo, CellStyleMo>处理样式，前两个参数为入参，最后的参数为出参，
     // 链表上一级的出参作为下一级的入参传入，最终出参作用于excel表单上
-    LinkedHashMap<Predicate<Cell>, BiFunction<Cell, CellStyleMo, CellStyleMo>> cellStyleHandlersLink = new LinkedHashMap<>();
+    private LinkedHashMap<Predicate<Cell>, BiFunction<Cell, CellStyleMo, CellStyleMo>> cellStyleHandlersLink = new LinkedHashMap<>();
 
     public int getStartRow() {
         return startRow;
@@ -173,9 +174,6 @@ public class SheetProperty {
     }
     /**
      * 给指定区域添加下拉列表约束
-     * @Return : void
-     * @Author : Vince
-     * @Date : 2019/7/16 17:31
      */
     public void addExplicitConstraint(int firstRow, int lastRow, int firstCol, int lastCol, String[] explicitArray) {
         if (explicitArray == null || explicitArray.length == 0) return;
@@ -235,7 +233,7 @@ public class SheetProperty {
 
         boolean isHeader = needHead && rowIndex - startRow < headRowNum;
 
-        CellStyleMo style = null;
+        CellStyleMo style;
         if (isHeader) { // withhead
             style = columnHeaderStyles.get(columnIndex);
         } else { // body

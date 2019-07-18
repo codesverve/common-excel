@@ -5,11 +5,8 @@ import org.apache.poi.poifs.filesystem.FileMagic;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/17 12:15
- */
 // 暂时没用
+@SuppressWarnings({"DeprecatedIsStillUsed", "unused"})
 @Deprecated
 public enum ExcelType {
 

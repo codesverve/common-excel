@@ -2,10 +2,6 @@ package com.uetty.common.excel.demo;
 
 import com.uetty.common.excel.constant.ConstraintValue;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/17 19:46
- */
 public enum MyConstraintEnum implements ConstraintValue {
 
     PROP2_A("prop_a"),
@@ -16,7 +12,7 @@ public enum MyConstraintEnum implements ConstraintValue {
 
     String value;
 
-    private MyConstraintEnum(String value) {
+    MyConstraintEnum(String value) {
         this.value = value;
     }
 

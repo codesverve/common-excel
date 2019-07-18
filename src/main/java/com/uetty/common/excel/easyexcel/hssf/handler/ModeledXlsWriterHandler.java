@@ -23,10 +23,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/16 14:15
- */
+@SuppressWarnings("unused")
 public class ModeledXlsWriterHandler implements WriteHandler {
 
     private static final int STANDARD_CHAR_WIDTH = 256; // 标准字符宽度
@@ -39,9 +36,11 @@ public class ModeledXlsWriterHandler implements WriteHandler {
 
     private int startRow;
     // 是否有ExcelProperty注解
-    boolean hasExcelProperty = true;
+    private boolean hasExcelProperty = true;
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private Map<CellStyleMo, org.apache.poi.ss.usermodel.CellStyle> cellStyleCached = new HashMap<>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private Map<FontStyleMo, Font> fontStyleCached = new HashMap<>();
 
     private List<Field> fields = new ArrayList<>();
@@ -90,7 +89,7 @@ public class ModeledXlsWriterHandler implements WriteHandler {
         hasExcelProperty = fields.stream().anyMatch(f -> f.getAnnotation(ExcelProperty.class) != null);
 
         // 标题行数
-        int titleRowNum = fields.stream().map(f -> f.getAnnotation(ExcelProperty.class) != null ? f.getAnnotation(ExcelProperty.class).value().length : 0).max(Integer::compareTo).orElseGet(() -> 0);
+        int titleRowNum = fields.stream().map(f -> f.getAnnotation(ExcelProperty.class) != null ? f.getAnnotation(ExcelProperty.class).value().length : 0).max(Integer::compareTo).orElse(0);
         sheetProperty.setHeadRowNum(titleRowNum);
 
         for (int i = 0; i < fields.size(); i++) {
@@ -246,11 +245,6 @@ public class ModeledXlsWriterHandler implements WriteHandler {
                 sheet.setColumnWidth(col, (int) (drawColumnWidth * STANDARD_CHAR_WIDTH));
             }
         }
-        Map<Integer, Double> columnWidths = sheetProperty.getColumnWidths();
-        columnWidths.forEach((col, width) -> {
-            if (width != null && width >= 0) {
-            }
-        });
 
         List<ICellRange> mergeRanges = sheetProperty.getMergeRanges();
         for (ICellRange mergeRange : mergeRanges) {
@@ -267,14 +261,13 @@ public class ModeledXlsWriterHandler implements WriteHandler {
     public void cell(int colIndex, Cell cell) {
         CellStyleMo style = sheetProperty.getDrawCellStyle(cell);
 
-        org.apache.poi.ss.usermodel.CellStyle cellStyle = getCellStyle(cell, style);
-        //noinspection ConstantConditions
+        org.apache.poi.ss.usermodel.CellStyle cellStyle = getCellStyle(style);
         if (cellStyle != null) {
             cell.setCellStyle(cellStyle);
         }
     }
 
-    private org.apache.poi.ss.usermodel.CellStyle getCellStyle(Cell cell, CellStyleMo styleMo) {
+    private org.apache.poi.ss.usermodel.CellStyle getCellStyle(CellStyleMo styleMo) {
         if (styleMo == null) return null;
 
         // 设置字体
@@ -399,9 +392,6 @@ public class ModeledXlsWriterHandler implements WriteHandler {
 
     /**
      * 给指定区域添加下拉列表约束
-     * @Return : void
-     * @Author : Vince
-     * @Date : 2019/7/16 17:31
      */
     public void addExplicitConstraint(int firstRow, int lastRow, int firstCol, int lastCol, String[] explicitArray) {
         this.sheetProperty.addExplicitConstraint(firstRow, lastRow, firstCol, lastCol, explicitArray);

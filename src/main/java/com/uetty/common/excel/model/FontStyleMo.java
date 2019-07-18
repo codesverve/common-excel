@@ -5,21 +5,18 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.util.Objects;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/16 14:23
- */
+@SuppressWarnings("unused")
 public class FontStyleMo {
 
-    String name;
+    private String name;
 
-    double size;
+    private double size;
 
-    IndexedColors color;
+    private IndexedColors color;
 
-    boolean bold;
+    private boolean bold;
 
-    Font font;
+    private Font font;
 
     public String getName() {
         return name;

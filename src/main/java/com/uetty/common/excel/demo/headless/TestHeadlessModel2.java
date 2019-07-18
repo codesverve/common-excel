@@ -1,7 +1,6 @@
 package com.uetty.common.excel.demo.headless;
 
 import com.uetty.common.excel.demo.MyConstraintEnum;
-import com.uetty.common.excel.demo.MyModel2;
 import com.uetty.common.excel.easyexcel.hssf.XlsExcelWriter;
 
 import java.io.IOException;
@@ -10,10 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @Author: Vince
- * @Date: 2019/7/17 21:06
- */
 public class TestHeadlessModel2 {
 
     // 与TestHeadlessModel1相比，注解不一样，将@ExcelProperty换成了@ExcelColumnNum
@@ -25,12 +20,12 @@ public class TestHeadlessModel2 {
         writer.write(createTestListObject2());
     }
 
-    private static int rowSize = 14;
+    private static final int ROW_SIZE = 14;
     private static String[] PROP1_VALUES = {"aaa1", "aaa2", "aaa3"};
     private static MyConstraintEnum[] enValues = MyConstraintEnum.values();
     private static List<MyModel2> createTestListObject2() {
         List<MyModel2> list = new ArrayList<>();
-        for (int i = 0; i < rowSize; i++) {
+        for (int i = 0; i < ROW_SIZE; i++) {
             MyModel2 ts = new MyModel2();
             ts.setPr1("pr1 == " + i);
             int index = i + (Math.random() > 0.8 ? 1 : 0);
