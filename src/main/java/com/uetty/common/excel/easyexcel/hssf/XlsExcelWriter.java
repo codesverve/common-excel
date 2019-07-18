@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue", "WeakerAccess"})
 public class XlsExcelWriter {
 
     private static final int STANDARD_CHAR_WIDTH = 256; // 标准字符宽度
