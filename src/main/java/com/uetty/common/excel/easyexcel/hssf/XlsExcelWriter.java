@@ -23,6 +23,7 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -45,12 +46,21 @@ public class XlsExcelWriter {
     private List<Field> fields = new ArrayList<>();
 
     private String outputPath;
+    private OutputStream outputStream;
+
     private boolean needHead = true;
     private int sheetIndex = 1;
     private String sheetName;
 
     public XlsExcelWriter(String outputPath, Class<? extends BaseRowModel> modelClazz, int startRow) {
         this.outputPath = Objects.requireNonNull(outputPath);
+        this.modelClazz = Objects.requireNonNull(modelClazz);
+        this.startRow = startRow;
+        initProperty();
+    }
+
+    public XlsExcelWriter(OutputStream outputStream, Class<? extends BaseRowModel> modelClazz, int startRow) {
+        this.outputStream = Objects.requireNonNull(outputStream);
         this.modelClazz = Objects.requireNonNull(modelClazz);
         this.startRow = startRow;
         initProperty();
@@ -209,10 +219,8 @@ public class XlsExcelWriter {
 //            setNeedHead(false);
 //        }
 
-        File file = new File(outputPath);
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-
-            ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(null, fos, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
+        try (OutputStream outputStream = this.outputStream != null ? this.outputStream : new FileOutputStream(new File(this.outputPath))) {
+            ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(null, outputStream, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
 
             com.alibaba.excel.metadata.Sheet sheet = new com.alibaba.excel.metadata.Sheet(sheetIndex, 0, modelClazz);
             int iStartRow = this.startRow;
