@@ -215,29 +215,36 @@ public class XlsExcelWriter {
     }
 
     public void write(List<? extends BaseRowModel> list) throws IOException {
-//        if (!hasExcelProperty) {
-//            setNeedHead(false);
-//        }
-
-        try (OutputStream outputStream = this.outputStream != null ? this.outputStream : new FileOutputStream(new File(this.outputPath))) {
-            ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(null, outputStream, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
-
-            com.alibaba.excel.metadata.Sheet sheet = new com.alibaba.excel.metadata.Sheet(sheetIndex, 0, modelClazz);
-            int iStartRow = this.startRow;
-            if (sheetProperty.getHeadRowNum() == 0 || !getNeedHead()) { // easyexcel 本身在这一块有个小bug，兼容一下
-                iStartRow = iStartRow - 1;
-            }
-            sheet.setStartRow(iStartRow);
-            if (sheetName != null) {
-                sheet.setSheetName(sheetName);
-            } else {
-                sheet.setSheetName("sheet-" + sheetIndex);
-            }
-
-            writer.write(list, sheet);
-            //关闭资源
-            writer.finish();
+        if (!hasExcelProperty) {
+            setNeedHead(false);
         }
+
+        if (this.outputStream != null) {
+            write0(list, this.outputStream);
+        } else {
+            try (OutputStream outputStream = new FileOutputStream(new File(this.outputPath))) {
+                write0(list, outputStream);
+            }
+        }
+    }
+
+    private void write0(List<? extends BaseRowModel> list, OutputStream outputStream) {
+        ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(null, outputStream, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
+        com.alibaba.excel.metadata.Sheet sheet = new com.alibaba.excel.metadata.Sheet(sheetIndex, 0, modelClazz);
+        int iStartRow = this.startRow;
+        if (sheetProperty.getHeadRowNum() == 0 || !getNeedHead()) { // easyexcel 本身在这一块有个小bug，兼容一下
+            iStartRow = iStartRow - 1;
+        }
+        sheet.setStartRow(iStartRow);
+        if (sheetName != null) {
+            sheet.setSheetName(sheetName);
+        } else {
+            sheet.setSheetName("sheet-" + sheetIndex);
+        }
+
+        writer.write(list, sheet);
+        //关闭资源
+        writer.finish();
     }
 
     public class EasyExcelHandler implements WriteHandler {
