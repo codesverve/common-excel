@@ -299,10 +299,12 @@ public class XlsExcelWriter {
             Font font = fontStyleCached.get(styleMo.getFontStyle());
             if (font == null) {
                 font = sheet.getWorkbook().createFont();
-                font.setFontName(styleMo.getFontStyle().getName());
-                font.setColor(styleMo.getFontStyle().getColor().getIndex());
-                if (styleMo.getFontStyle().getSize() != -1) {
-                    font.setFontHeightInPoints((short) styleMo.getFontStyle().getSize());
+                FontStyleMo fontStyle = styleMo.getFontStyle();
+                font.setFontName(fontStyle.getName());
+                font.setColor(fontStyle.getColor().getIndex());
+                font.setBold(fontStyle.getBold());
+                if (fontStyle.getSize() != -1) {
+                    font.setFontHeightInPoints((short) fontStyle.getSize());
                 }
             }
             styleMo.setFont(font);
