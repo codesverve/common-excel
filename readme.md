@@ -1,15 +1,37 @@
-package com.uetty.common.excel.demo;
+# common-excel
 
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.metadata.BaseRowModel;
-import com.uetty.common.excel.anno.*;
-import org.apache.poi.ss.usermodel.IndexedColors;
+现在是第一版，基于引入`alibaba/easyexcel`依赖进行样式扩展封装而来的，增加了一些样式注解
 
-import java.util.Date;
 
-// 宽度默认值
-@SuppressWarnings("unused")
+
+## 可以解决什么问题
+
+1. 注解式样式
+2. 代码方式自定义样式
+3. 冻结行列样式
+4. 合并单元格样式
+5. 设置内容下拉框
+6. 背景颜色
+7. 字体设置
+8. 列宽度设置
+9. 边框样式
+10. 居中方式
+11. 是否换行
+
+## 效果
+
+![1564120282219](./src/main/resources/img/282219.png)
+
+![1564120302103](./src/main/resources/img/302103.png)
+
+## DEMO
+
+model代码示例
+
+```
+
 @CellFreeze(freezeRow = 2, freezeCol = 2)
+// 宽度默认值
 @ColumnWidth(width = 40)
 // 同时作用于表标题和内容的样式默认值
 @CellStyle(fontStyle = @FontStyle(color = IndexedColors.LIGHT_BLUE, size = 14))
@@ -17,15 +39,9 @@ public class MyModel1 extends BaseRowModel {
 
     // easyexcel 解析注解
     @ExcelProperty(value={"pri", "pr1"}, index = 0)
-    // 作用于该列标题的样式
-//    @CellStyle(type = StyleType.HEAD_STYLE, borderColor = IndexedColors.GOLD, borderStyle = BorderStyle.DASHED)
-    // 作用于该列内容的样式
-//    @CellStyle(type = StyleType.BODY_STYLE, backgroundColor = IndexedColors.PINK, fontStyle = @FontStyle(color = IndexedColors.LIGHT_BLUE))
     private String pr1;
 
     @ExcelProperty(value={"pri", "pr2"}, index = 1)
-    // 作用于该列标题和内容的样式
-//    @CellStyle(type=StyleType.BODY_STYLE, borderColor = IndexedColors.GOLD, borderStyle = BorderStyle.DASHED)
     private String pr2;
 
     @ExcelProperty(value = {"propValue1"}, index = 2)
@@ -93,3 +109,12 @@ public class MyModel1 extends BaseRowModel {
         this.date = date;
     }
 }
+```
+
+详细代码戳下方链接
+
+[有标题头demo](./src/main/java/com/uetty/common/excel/demo/withhead/TestWithHeadModel.java)
+
+[无标题头demo1](./src/main/java/com/uetty/common/excel/demo/headless/TestHeadlessModel1.java)
+
+[无标题头demo2](./src/main/java/com/uetty/common/excel/demo/headless/TestHeadlessModel2.java)

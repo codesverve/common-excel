@@ -20,7 +20,7 @@ public class TestWithHeadModel {
         // 合并单元格
         writer.addMergeRange(8, 9, 6, 6)
                 // 另外添加下拉框约束
-                .addExplicitConstraint(3, 4, 2, 4, new String[]{"理学", "文学", "工学"})
+//                .addExplicitConstraint(3, 4, 2, 4, new String[]{"理学", "文学", "工学"})
                 // 自定义链式样式处理handler
                 // 参数1：是否进入handler
                 // 参数2：handler逻辑，入参cell和当前样式，出参样式类将作为下一个handler的入参
@@ -31,7 +31,7 @@ public class TestWithHeadModel {
                 .addCustomCellStyleHandler(cell -> cell.getRowIndex() >= 2, (cell, style) -> {
                     System.out.println(ExcelHelper.getCellValue(cell, null));
                     int rowIndex = cell.getRowIndex();
-                    IndexedColors color = rowIndex % 2 == 0 ? IndexedColors.BLUE : IndexedColors.GREY_25_PERCENT;
+                    IndexedColors color = rowIndex % 2 == 0 ? IndexedColors.WHITE : IndexedColors.GREY_25_PERCENT;
                     style.setBackgroundColor(color);
                     return style;
                 });
