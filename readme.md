@@ -20,9 +20,9 @@
 
 ## 效果
 
-![img - 1](https://img-blog.csdnimg.cn/20190726142449580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1ZpbmNlbnRfRmllbGQ=,size_16,color_FFFFFF,t_70) 
+![img - 1](https://www.uetty.com/gitattach/LP-20190726_1.png) 
 
-![img - 2](https://img-blog.csdnimg.cn/20190726142534543.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1ZpbmNlbnRfRmllbGQ=,size_16,color_FFFFFF,t_70) 
+![img - 2](https://www.uetty.com/gitattach/LP-20190726_2.png) 
 
 ## DEMO
 
