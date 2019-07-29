@@ -321,6 +321,7 @@ public class XlsExcelWriter {
                 if (fontStyle.getSize() != -1) {
                     font.setFontHeightInPoints((short) fontStyle.getSize());
                 }
+                fontStyleCached.put(styleMo.getFontStyle(), font);
             }
             styleMo.setFont(font);
 
@@ -347,6 +348,8 @@ public class XlsExcelWriter {
                 cellStyle.setTopBorderColor(styleMo.getBorderColor().getIndex());
 
                 cellStyle.setWrapText(styleMo.getWrapText());
+
+                cellStyleCached.put(styleMo, cellStyle);
             }
 
             return cellStyle;
