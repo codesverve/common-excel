@@ -7,6 +7,32 @@
     <groupId>com.uetty</groupId>
     <artifactId>common-excel</artifactId>
     <version>1.0.1-M</version>
+    <packaging>jar</packaging>
+
+    <name>common-excel</name>
+    <url>https://github.com/uetty/common-excel</url>
+    <description>excel writer common tools</description>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://www.uetty.com</url>
+        <connection>scm:git:https://github.com/uetty/common-excel.git</connection>
+        <developerConnection>scm:git:https://github.com/uetty/common-excel.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>vince</name>
+            <email>vincent_field@foxmail.com</email>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
 
     <properties>
         <log4j.version>2.4.1</log4j.version>
@@ -51,6 +77,28 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <!--打包环境-->
+            <id>release</id>
+            <properties>
+                <profiles.active>release</profiles.active>
+            </properties>
+            <!--定义snapshots库和releases库的nexus地址-->
+            <distributionManagement>
+                <snapshotRepository>
+                    <!--oss需要对应到settings.xml下的service的id-->
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <build>
         <defaultGoal>compile</defaultGoal>
         <finalName>${project.artifactId}</finalName>
@@ -68,9 +116,22 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>utf8</encoding>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
