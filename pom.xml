@@ -6,7 +6,7 @@
 
     <groupId>com.uetty.kit</groupId>
     <artifactId>common-excel</artifactId>
-    <version>1.0.1.M</version>
+    <version>1.0.1-M</version>
 
     <properties>
         <log4j.version>2.4.1</log4j.version>
