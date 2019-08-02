@@ -174,6 +174,12 @@ public class SheetProperty {
     }
     /**
      * 给指定区域添加下拉列表约束
+     * @param firstRow 首行
+     * @param lastRow 最后一行
+     * @param firstCol 首列
+     * @param lastCol 最后一列
+     * @param explicitArray 约束数组
+     * @author : Vince
      */
     public void addExplicitConstraint(int firstRow, int lastRow, int firstCol, int lastCol, String[] explicitArray) {
         if (explicitArray == null || explicitArray.length == 0) return;

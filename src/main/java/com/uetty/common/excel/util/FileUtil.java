@@ -9,6 +9,10 @@ public class FileUtil {
 
 	/**
 	 * 输入流的数据输出到输出流
+	 * @param os 输出流
+	 * @param is 输入流
+	 * @author : Vince
+	 * @throws IOException 流异常
 	 */
 	public static void writeFromInputStream(OutputStream os, InputStream is) throws IOException {
 		int len = -1;
@@ -49,6 +53,8 @@ public class FileUtil {
 	
 	/**
 	 * 是否windows系统
+	 * @return : boolean
+	 * @author : Vince
 	 */
 	public static boolean isWinOS() {
 		boolean isWinOS = false;

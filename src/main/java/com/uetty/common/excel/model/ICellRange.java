@@ -20,6 +20,9 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 挖除区域
+     * @param range 区域
+     * @return : java.util.List
+     * @author : Vince
      */
     public List<ICellRange> subtractRange(ICellRange range) {
         List<ICellRange> list = new ArrayList<>();
@@ -66,6 +69,9 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 返回重叠区域
+     * @param range 区域
+     * @return : com.uetty.common.excel.model.ICellRange
+     * @author : Vince
      */
     public ICellRange overlapRange(ICellRange range) {
         int left = Math.max(getMinColumn(), range.getMinColumn());
@@ -79,6 +85,9 @@ public class ICellRange extends CellRangeAddress implements Cloneable {
 
     /**
      * 是否重叠
+     * @param range 区域
+     * @return : boolean
+     * @author : Vince
      */
     public boolean isOverlap(ICellRange range) {
         int top = Math.max(getMinRow(), range.getMinRow());

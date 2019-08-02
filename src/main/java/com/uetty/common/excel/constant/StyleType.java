@@ -1,8 +1,8 @@
 package com.uetty.common.excel.constant;
 
 /**
- * @Author: Vince
- * @Date: 2019/7/16 11:58
+ * Style注解类型枚举
+ * @author : Vince
  */
 public enum StyleType {
     HEAD_STYLE,

@@ -18,27 +18,32 @@ public @interface CellStyle {
     /**
      * 水平居中方式 默认左居中
      * @see HorizontalAlignment
+     * @return : org.apache.poi.ss.usermodel.HorizontalAlignment
+     * @author : Vince
      */
     HorizontalAlignment horizontalAlign() default HorizontalAlignment.LEFT;
 
     /**
-     *
      * 垂直居中方式 默认居中
      * @see VerticalAlignment
+     * @return : org.apache.poi.ss.usermodel.VerticalAlignment
+     * @author : Vince
      */
     VerticalAlignment verticalAlign() default VerticalAlignment.CENTER;
 
 
     /**
      * 边框方式 默认无
-     * @see BorderStyle
+     * @return : org.apache.poi.ss.usermodel.BorderStyle
+     * @author : Vince
      */
     BorderStyle borderStyle() default BorderStyle.NONE;
 
 
     /**
      * 边框颜色 默认白
-     * @see IndexedColors
+     * @return : org.apache.poi.ss.usermodel.IndexedColors
+     * @author : Vince
      */
     IndexedColors borderColor() default IndexedColors.AUTOMATIC;
 
@@ -47,19 +52,24 @@ public @interface CellStyle {
      * 字体设置
      * @see org.apache.poi.xssf.usermodel.XSSFFont
      * @see org.apache.poi.hssf.usermodel.HSSFFont
+     * @return : com.uetty.common.excel.anno.FontStyle
+     * @author : Vince
      */
     FontStyle fontStyle() default @FontStyle();
 
 
     /**
      * 背景颜色
-     * @see IndexedColors
+     * @return : org.apache.poi.ss.usermodel.IndexedColors
+     * @author : Vince
      */
     IndexedColors backgroundColor() default IndexedColors.WHITE;
 
 
     /**
      * 单元格是否换行
+     * @return : boolean
+     * @author : Vince
      */
     boolean wrapText() default false;
 
