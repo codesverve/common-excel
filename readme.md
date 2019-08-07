@@ -119,7 +119,14 @@ public class MyModel1 extends BaseRowModel {
 
 [无标题头demo2](./src/main/java/com/uetty/common/excel/demo/headless/TestHeadlessModel2.java)
 
-
+## 引用
+```
+<dependency>
+    <groupId>com.uetty</groupId>
+    <artifactId>common-excel</artifactId>
+    <version>1.0.2-M</version>
+</dependency>
+```
 
 ## 联系 
 [提交ISSUE](https://github.com/Uetty/common-excel/issues)或[留言](https://www.uetty.com/article/b6b241c5-466a-4d96-9980-3ce01775d343)
