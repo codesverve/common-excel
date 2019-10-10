@@ -1,4 +1,4 @@
-package com.uetty.common.excel.demo.withhead;
+package com.uetty.common.excel.demo.multisheet;
 
 import com.uetty.common.excel.demo.MyConstraintEnum;
 import com.uetty.common.excel.demo.MyModel1;
@@ -12,10 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class TestWithHeadModel {
-
+public class TestMultipleSheet {
     public static void main(String[] args) throws IOException {
-        XlsExcelWriter writer = new XlsExcelWriter("/data/com-exc.xls");
+        XlsExcelWriter writer = new XlsExcelWriter("/data/com-exc4.xls");
 
         writer.addNewSheet(MyModel1.class, 0);
         // 合并单元格
@@ -26,18 +25,27 @@ public class TestWithHeadModel {
                 // 参数1：是否进入handler
                 // 参数2：handler逻辑，入参cell和当前样式，出参样式类将作为下一个handler的入参
                 .addCustomCellStyleHandler(cell -> cell.getRowIndex() < 2, (cell, style) -> {
-                    style.setBackgroundColor(IndexedColors.CORAL);
+                    style.setBackgroundColor(IndexedColors.SEA_GREEN);
                     return style;
                 })
                 .addCustomCellStyleHandler(cell -> cell.getRowIndex() >= 2, (cell, style) -> {
                     System.out.println(ExcelHelper.getCellValue(cell, null));
                     int rowIndex = cell.getRowIndex();
-                    IndexedColors color = rowIndex % 2 == 0 ? IndexedColors.WHITE : IndexedColors.GREY_25_PERCENT;
+                    IndexedColors color = rowIndex % 2 == 0 ? IndexedColors.WHITE : IndexedColors.GREY_40_PERCENT;
                     style.setBackgroundColor(color);
                     return style;
                 });
         // 数据写入excel
         writer.write(createTestListObject2());
+
+        writer.addNewSheet();
+        writer.write(createTestListObject2());
+
+        writer.addNewSheet(MyModel1.class, 0);
+        writer.setSheetName("sheet third");
+//        writer.addCustomCellStyleHandler()
+        writer.write(createTestListObject2());
+
         writer.flush();
     }
 
@@ -49,12 +57,12 @@ public class TestWithHeadModel {
 
         for (int i = 0; i < ROW_SIZE; i++) {
             MyModel1 ts = new MyModel1();
+            int index = i + (Math.random() > 0.8 ? 1 : 0);
             ts.setPr1("pr1 == " + i);
             ts.setPr2(UUID.randomUUID().toString());
-            int index = i + (Math.random() > 0.8 ? 1 : 0);
             ts.setPropValue1(PROP1_VALUES[index % PROP1_VALUES.length]);
-            ts.setPropValue2(enValues[index % enValues.length].getValue());
             ts.setScore((int) (Math.random() * 100));
+            ts.setPropValue2(enValues[index % enValues.length].getValue());
             ts.setDate(new Date());
             list.add(ts);
         }

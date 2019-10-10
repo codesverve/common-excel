@@ -14,8 +14,9 @@ import java.util.UUID;
 public class TestHeadlessModel1 {
 
     public static void main(String[] args) throws IOException {
-        XlsExcelWriter writer = new XlsExcelWriter("/data/test2.xls", MyModel1.class, 0);
+        XlsExcelWriter writer = new XlsExcelWriter("/data/com-exc2.xls");
 
+        writer.addNewSheet(MyModel1.class, 0);
         // 设置无需标题行
         writer.setNeedHead(false)
                 .addExplicitConstraint(3, 4, 2, 4, new String[]{"理学", "文学", "工学"})
@@ -28,6 +29,7 @@ public class TestHeadlessModel1 {
                 .clearFreeze();
         // 数据写入excel
         writer.write(createTestListObject2());
+        writer.flush();
     }
 
     private static final int ROW_SIZE = 14;

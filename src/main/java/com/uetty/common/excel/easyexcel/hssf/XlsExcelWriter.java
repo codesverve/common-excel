@@ -47,23 +47,66 @@ public class XlsExcelWriter {
 
     private String outputPath;
     private OutputStream outputStream;
+    private boolean autoCloseOutputStream;
 
     private boolean needHead = true;
-    private int sheetIndex = 1;
+    private int sheetIndex = 0;
     private String sheetName;
 
-    public XlsExcelWriter(String outputPath, Class<? extends BaseRowModel> modelClazz, int startRow) {
+    private transient boolean sheetHasWrited = false;
+    private transient ExcelWriter writer;
+
+    public XlsExcelWriter(String outputPath) {
         this.outputPath = Objects.requireNonNull(outputPath);
-        this.modelClazz = Objects.requireNonNull(modelClazz);
-        this.startRow = startRow;
-        initProperty();
+        this.autoCloseOutputStream = true;
     }
 
-    public XlsExcelWriter(OutputStream outputStream, Class<? extends BaseRowModel> modelClazz, int startRow) {
+    public XlsExcelWriter(OutputStream outputStream) {
         this.outputStream = Objects.requireNonNull(outputStream);
+        this.autoCloseOutputStream = false;
+    }
+
+    /**
+     * 会清空自定义样式
+     * @param modelClazz 模型类
+     * @param startRow 开始的行
+     * @return com.uetty.common.excel.easyexcel.hssf.XlsExcelWriter
+     * @author Vince
+     */
+    public XlsExcelWriter addNewSheet(Class<? extends BaseRowModel> modelClazz, int startRow) {
+        if (this.sheetIndex != 0 && !this.sheetHasWrited) {
+            return this;
+        }
         this.modelClazz = Objects.requireNonNull(modelClazz);
         this.startRow = startRow;
+        this.sheetIndex++;
+        if (this.sheetIndex > 1) {
+            this.sheetName = null;
+        }
+        this.sheetHasWrited = false;
         initProperty();
+        return this;
+    }
+
+    public XlsExcelWriter addNewSheet(int startRow) {
+        if (this.sheetIndex == 0) {
+            throw new UnsupportedOperationException("model class has not be set, only addNewSheet(Class,int) method can be used in the first sheet.");
+        }
+        if (!this.sheetHasWrited) {
+            return this;
+        }
+        this.startRow = startRow;
+        this.sheetIndex++;
+        if (this.sheetIndex > 1) {
+            this.sheetName = null;
+        }
+        this.sheetHasWrited = false;
+        return this;
+    }
+
+
+    public XlsExcelWriter addNewSheet() {
+        return addNewSheet(this.startRow);
     }
 
     private void initProperty() {
@@ -219,17 +262,39 @@ public class XlsExcelWriter {
             setNeedHead(false);
         }
 
-        if (this.outputStream != null) {
-            write0(list, this.outputStream);
-        } else {
-            try (OutputStream outputStream = new FileOutputStream(new File(this.outputPath))) {
-                write0(list, outputStream);
-            }
+        if (outputStream == null) {
+            outputStream = new FileOutputStream(new File(outputPath));
         }
+        write0(list, outputStream);
+    }
+
+    public void flush() throws IOException {
+        if (writer == null) {
+            return;
+        }
+        //关闭资源
+        writer.finish();
+        writer = null;
+
+        if (autoCloseOutputStream && outputStream != null) {
+            outputStream.close();
+        }
+
+        sheetIndex = 0;
+        sheetName = null;
+        sheetHasWrited = false;
+    }
+
+    private ExcelWriter getWriter() {
+        if (writer == null) {
+            writer = EasyExcelFactory.getWriterWithTempAndHandler(null, outputStream, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
+        }
+        return writer;
     }
 
     private void write0(List<? extends BaseRowModel> list, OutputStream outputStream) {
-        ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(null, outputStream, ExcelTypeEnum.XLS, getNeedHead(), new EasyExcelHandler());
+        ExcelWriter writer = getWriter();
+
         com.alibaba.excel.metadata.Sheet sheet = new com.alibaba.excel.metadata.Sheet(sheetIndex, 0, modelClazz);
         int iStartRow = this.startRow;
         if (sheetProperty.getHeadRowNum() == 0 || !getNeedHead()) { // easyexcel 本身在这一块有个小bug，兼容一下
@@ -243,8 +308,8 @@ public class XlsExcelWriter {
         }
 
         writer.write(list, sheet);
-        //关闭资源
-        writer.finish();
+
+        sheetHasWrited = true;
     }
 
     public class EasyExcelHandler implements WriteHandler {
@@ -381,10 +446,6 @@ public class XlsExcelWriter {
     public int getSheetIndex() {
         return sheetIndex;
     }
-    public XlsExcelWriter setSheetIndex(int sheetIndex) {
-        this.sheetIndex = sheetIndex;
-        return this;
-    }
     public String getSheetName() {
         return sheetName;
     }
@@ -392,49 +453,67 @@ public class XlsExcelWriter {
         this.sheetName = sheetName;
         return this;
     }
+
+    private void checkProperty() {
+        if (this.sheetProperty == null) {
+            throw new UnsupportedOperationException("there must be at least one sheet exist before doing this.");
+        }
+    }
+
     public XlsExcelWriter addMergeRange(int firstRow, int lastRow, int firstCol, int lastCol) {
+        checkProperty();
         this.sheetProperty.addMergeRange(firstRow, lastRow, firstCol, lastCol);
         return this;
     }
     public XlsExcelWriter removeMergeRange(int firstRow, int lastRow, int firstCol, int lastCol) {
+        checkProperty();
         this.sheetProperty.removeMergeRange(firstRow, lastRow, firstCol, lastCol);
         return this;
     }
     public XlsExcelWriter clearMergeRange() {
+        checkProperty();
         this.sheetProperty.clearMergeRange();
         return this;
     }
     public XlsExcelWriter addExplicitConstraint(int firstRow, int lastRow, int firstCol, int lastCol, String[] explicitArray) {
+        checkProperty();
         this.sheetProperty.addExplicitConstraint(firstRow, lastRow, firstCol, lastCol, explicitArray);
         return this;
     }
     public XlsExcelWriter removeRangeConstraint(int firstRow, int lastRow, int firstCol, int lastCol) {
+        checkProperty();
         this.sheetProperty.removeRangeConstraint(firstRow, lastRow, firstCol, lastCol);
         return this;
     }
     public XlsExcelWriter clearExplicitConstraints() {
+        checkProperty();
         this.sheetProperty.clearExplicitConstraints();
         return this;
     }
     public XlsExcelWriter clearCustomCellStyleHandlers() {
+        checkProperty();
         this.sheetProperty.clearCustomCellStyleHandlers();
         return this;
     }
     public XlsExcelWriter removeCustomCellStyleHandler(Predicate<Cell> predicate) {
+        checkProperty();
         this.sheetProperty.removeCustomCellStyleHandler(predicate);
         return this;
     }
     public XlsExcelWriter addCustomCellStyleHandler(Predicate<Cell> predicate, BiFunction<Cell, CellStyleMo, CellStyleMo> handler) {
+        checkProperty();
         this.sheetProperty.addCustomCellStyleHandler(predicate, handler);
         return this;
     }
 
     public XlsExcelWriter setFreeze(int freezeCol, int freezeRow) {
+        checkProperty();
         this.sheetProperty.setFreeze(freezeCol, freezeRow);
         return this;
     }
 
     public XlsExcelWriter clearFreeze() {
+        checkProperty();
         this.sheetProperty.setFreeze(0, 0);
         return this;
     }

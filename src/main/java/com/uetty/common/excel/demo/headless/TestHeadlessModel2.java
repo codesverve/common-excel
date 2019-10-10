@@ -13,11 +13,12 @@ public class TestHeadlessModel2 {
 
     // 与TestHeadlessModel1相比，注解不一样，将@ExcelProperty换成了@ExcelColumnNum
     public static void main(String[] args) throws IOException {
-        XlsExcelWriter writer = new XlsExcelWriter("/data/test3.xls", MyModel2.class, 0);
-
+        XlsExcelWriter writer = new XlsExcelWriter("/data/com-exc3.xls");
+        writer.addNewSheet(MyModel2.class, 0);
 
         // 数据写入excel
         writer.write(createTestListObject2());
+        writer.flush();
     }
 
     private static final int ROW_SIZE = 14;

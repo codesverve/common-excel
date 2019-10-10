@@ -6,7 +6,7 @@
 
     <groupId>com.uetty</groupId>
     <artifactId>common-excel</artifactId>
-    <version>1.0.2-M</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>common-excel</name>
@@ -114,7 +114,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
 <!--                            <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
-                            <updateReleaseInfo>true</updateReleaseInfo>
+<!--                            <updateReleaseInfo>true</updateReleaseInfo>-->
                         </configuration>
                     </plugin>
 
