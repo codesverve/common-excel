@@ -15,7 +15,7 @@ import java.util.UUID;
 public class TestMultipleSheet {
     public static void main(String[] args) throws IOException {
         XlsExcelWriter writer = new XlsExcelWriter("/data/com-exc4.xls");
-
+        // 第一个sheet
         writer.addNewSheet(MyModel1.class, 0);
         // 合并单元格
         writer.addMergeRange(8, 9, 6, 6)
@@ -35,17 +35,19 @@ public class TestMultipleSheet {
                     style.setBackgroundColor(color);
                     return style;
                 });
-        // 数据写入excel
+        // 数据写入
         writer.write(createTestListObject2());
 
+        // 第二个sheet，不变更Model
         writer.addNewSheet();
         writer.write(createTestListObject2());
 
+        // 第三个sheet，变更MyModel时，前面已设置的属性会重置掉
         writer.addNewSheet(MyModel1.class, 0);
         writer.setSheetName("sheet third");
 //        writer.addCustomCellStyleHandler()
         writer.write(createTestListObject2());
-
+        // 关闭io
         writer.flush();
     }
 

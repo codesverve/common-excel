@@ -126,7 +126,7 @@ public class MyModel1 extends BaseRowModel {
 <dependency>
     <groupId>com.uetty</groupId>
     <artifactId>common-excel</artifactId>
-    <version>1.0.2-M</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
