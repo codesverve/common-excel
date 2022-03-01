@@ -1,8 +1,5 @@
 package com.uetty.common.excel.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -18,8 +15,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ReflectUtil {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(ReflectUtil.class);
-
 	private static String getterName(String fieldName) {
 		return "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 	}
@@ -281,49 +276,7 @@ public class ReflectUtil {
 		
 		return throwMethodNotFound(clz, 2, params);
 	}
-	
-	/**
-	 * 打印该类包含的变量名
-	 * @param clz 类
-	 * @author : Vince
-	 */
-	public static void printContainFieldNames(Class<?> clz) {
-		Set<String> fieldSet = new HashSet<>();
-		try {
-			Field[] fields = clz.getFields(); // 公共变量（包含自父类继承的变量）
-			for (Field field : fields) {
-				fieldSet.add(field.getName());
-			}
-		} catch (Throwable e) {
-			LOG.error(e.getMessage(), e);
-		}
-		try {
-			Field[] fields = clz.getDeclaredFields(); // 非公共变量（无法包含自父类继承的变量）
-			for (Field field : fields) {
-				fieldSet.add(field.getName());
-			}
-		} catch (Throwable e) {
-			LOG.error(e.getMessage(), e);
-		}
-		for (String string : fieldSet) {
-			LOG.debug(string);
-		}
-	}
-	
-	/**
-	 * 打印类所在的文件路径
-	 * <p> 适合代码多个有包含相同类的jar出现bug时，借用该方法排除
-	 * @param clz 类
-	 * @author : Vince
-	 */
-	public static void printClassPath(Class<?> clz) {
-		String classFilePath = clz.getName();
-		classFilePath = classFilePath.replace('.', '/');
-		classFilePath += ".class";
-		
-		printClassLoaderAndPath(clz.getClassLoader(), clz, classFilePath);
-	}
-	
+
 	private static boolean hasClass(URL url, String classFilePath) {
 		try {
 			URL[] uls = {url};
@@ -335,30 +288,6 @@ public class ReflectUtil {
 			return false;
 		}
 	}
-	
-	private static void printClassLoaderAndPath(ClassLoader classloader, Class<?> clz, String classFilePath) {
-		if (classloader == null) {
-			return;
-		}
-		LOG.debug("classloader ==> " + classloader.toString());
-		
-		if (!(classloader instanceof URLClassLoader)) {
-			return;
-		}
-		
-		URLClassLoader urlClassLoader = (URLClassLoader) classloader;
-		URL[] urls = urlClassLoader.getURLs();
-		
-		for (URL url : urls) {
-			if (!hasClass(url, classFilePath)) {
-				continue;
-			}
-			LOG.debug(url.getPath());
-		}
-		LOG.debug("------------------------------------------------");
-		
-		ClassLoader parent = classloader.getParent();
-		printClassLoaderAndPath(parent, clz, classFilePath);
-	}
+
 
 }
