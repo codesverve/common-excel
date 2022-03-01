@@ -6,7 +6,7 @@
 
     <groupId>com.uetty</groupId>
     <artifactId>common-excel</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3-SR</version>
     <packaging>jar</packaging>
 
     <name>common-excel</name>
